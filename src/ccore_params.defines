@@ -1,0 +1,70 @@
+`define bypass_sources 2
+
+// See LICENSE.iitm for license details
+  `define statesize 2
+  
+  `ifdef muldiv
+    `define multicycle True
+  `endif
+  `ifdef spfpu
+    `define multicycle True
+  `endif
+
+// ------------ NEEDS TO BE REVISED ------------------
+`define SDRAMMemBase	'h80000000	
+`define SDRAMMemEnd  'h8FFFFFFF // 1GB
+
+`define ICACHE_MISS							0
+`define ICACHE_CACHEABLE	 				`ICACHE_MISS+1	
+`define ICACHE_LINEREPLACE 				`ICACHE_CACHEABLE+1
+`define ICACHE_TLBMISS						`ICACHE_LINEREPLACE+1
+`define ICACHE_MISALIGNED					`ICACHE_TLBMISS+1
+`define ICACHE_PREFETCHMISS				`ICACHE_MISALIGNED+1
+`define COND_BRANCH							`ICACHE_PREFETCHMISS+1
+`define COND_BRANCH_TAKEN					`COND_BRANCH+1
+`define COND_BRANCH_MISPREDICTED			`COND_BRANCH_TAKEN+1
+`define TAKEN_BRANCH_MISPREDICTED		`COND_BRANCH_MISPREDICTED+1
+`define UNCOND_JUMPS							`TAKEN_BRANCH_MISPREDICTED+1
+`define SPFPU_INST							`UNCOND_JUMPS+1
+`define DPFPU_INST							`SPFPU_INST+1
+`define DCACHE_TLBMISS						`DPFPU_INST+1
+`define TOTAL_LOADS							`DCACHE_TLBMISS+1
+`define TOTAL_STORES							`TOTAL_LOADS+1
+`define TOTAL_ATOMIC							`TOTAL_STORES+1
+`define DCACHE_LOAD_MISS					`TOTAL_ATOMIC+1
+`define DCACHE_STORE_MISS					`DCACHE_LOAD_MISS+1
+`define DCACHE_ATOMIC_MISS					`DCACHE_STORE_MISS+1
+`define DCACHE_CACHEABLE_LOAD				`DCACHE_ATOMIC_MISS+1
+`define DCACHE_CACHEABLE_STORE			`DCACHE_CACHEABLE_LOAD+1
+`define DCACHE_CACHEABLE_ATOMIC			`DCACHE_CACHEABLE_STORE+1
+`define DCACHE_WRITEBACKS					`DCACHE_CACHEABLE_ATOMIC+1
+`define DCACHE_LINEREPLACE					`DCACHE_WRITEBACKS+1
+`define DCACHE_MISALIGNED					`DCACHE_LINEREPLACE+1
+`define EXCEPTIONS_TAKEN					`DCACHE_MISALIGNED+1
+`define INTERRUPTS_TAKEN					`EXCEPTIONS_TAKEN+1
+`define MULDIV_INSTRUCTIONS				`INTERRUPTS_TAKEN+1
+`define MEMORY_INSTRUCTIONS				`MULDIV_INSTRUCTIONS+1
+`define EXEC_FLUSHES							`MEMORY_INSTRUCTIONS+1
+`define WB_FLUSHES							`EXEC_FLUSHES+1
+// --------------------------------------------------------------
+`ifdef icache
+  `define cache_control
+`endif
+`ifdef dcache
+  `define cache_control
+`endif
+/////////////////////////////////////////////////////////////////////////
+//////////////////////////////////// funct3 defintions for ISA ////////////////////
+
+//`define MUL_f3		'b000
+//`define MULH_f3		'b001
+//`define MULHSU_f3	'b010
+//`define MULHU_f3	'b011
+//`define DIV_f3		'b100
+//`define DIVU_f3		'b101
+
+////////////////////////////////////////////////////////////////////////////////////
+`define Counters 0
+
+////////////////////////////////////////////////////////////////////////////////////
+
