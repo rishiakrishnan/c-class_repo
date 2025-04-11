@@ -1,0 +1,368 @@
+hart_ids: [0]
+hart0:
+    Debug_Spec_Version: 1.0.0
+    supported_xlen:
+      - 64
+    debug_mode: true
+    parking_loop: 0x800
+    dcsr:
+        reset-val: 0x40000003
+        rv32:
+            accessible: false
+        rv64:
+            accessible: true
+            prv:
+                implemented: true
+                description: Contains the privilege level the hart was operating in
+                    when Debug Mode was entered.
+                shadow:
+                shadow_type: rw
+                msb: 1
+                lsb: 0
+                type:
+                    warl:
+                        dependency_fields: []
+                        legal:
+                          - prv[1:0] in [0x0:0x3]
+                        wr_illegal:
+                          - unchanged
+            step:
+                implemented: true
+                description: When set and not in Debug Mode the hart will only execute
+                    a single instruction;then enter Debug Mode
+                shadow:
+                shadow_type: rw
+                msb: 2
+                lsb: 2
+                type:
+                    warl:
+                        dependency_fields: []
+                        legal:
+                          - step[0] in [0x0, 0x1]
+                        wr_illegal:
+                          - unchanged
+            nmip:
+                implemented: true
+                type:
+                    ro_variable: true
+                description: When set, there is a Non-Maskable-Interrupt (NMI) pending
+                    for the hart.
+                shadow:
+                shadow_type: rw
+                msb: 3
+                lsb: 3
+            mprven:
+                implemented: true
+                description: mprv in mstatus.
+                shadow:
+                shadow_type: rw
+                msb: 4
+                lsb: 4
+                type:
+                    warl:
+                        dependency_fields: []
+                        legal:
+                          - mprven[0] in [0x0, 0x1]
+                        wr_illegal:
+                          - unchanged
+            v:
+                implemented: true
+                description: Extends the prv field with the virtualization mode WARL
+                    0 the hart was operating in when Debug Mode was entered
+                shadow:
+                shadow_type: rw
+                msb: 5
+                lsb: 5
+                type:
+                    ro_constant: 0
+            cause:
+                implemented: true
+                type:
+                    ro_variable: true
+                description: Explains why Debug Mode was entered
+                shadow:
+                shadow_type: rw
+                msb: 8
+                lsb: 6
+            stoptime:
+                implemented: true
+                description: Don’t increment any hart-local timers while in Debug
+                    Mode.
+                shadow:
+                shadow_type: rw
+                msb: 9
+                lsb: 9
+                type:
+                    warl:
+                        dependency_fields: []
+                        legal:
+                          - stoptime[0] in [0x0, 0x1]
+                        wr_illegal:
+                          - unchanged
+            stopcount:
+                implemented: true
+                description: Don’t increment any hart-local counters while in Debug
+                    Mode
+                shadow:
+                shadow_type: rw
+                msb: 10
+                lsb: 10
+                type:
+                    warl:
+                        dependency_fields: []
+                        legal:
+                          - stopcount[0] in [0x0, 0x1]
+                        wr_illegal:
+                          - unchanged
+            stepie:
+                implemented: true
+                description: Interrupts (including NMI) are enabled during single
+                    stepping.
+                shadow:
+                shadow_type: rw
+                msb: 11
+                lsb: 11
+                type:
+                    warl:
+                        dependency_fields: []
+                        legal:
+                          - stepie[0] in [0x0, 0x1]
+                        wr_illegal:
+                          - unchanged
+            ebreaku:
+                implemented: true
+                type:
+                    warl:
+                        dependency_fields: []
+                        legal:
+                          - ebreaku[0] in [0x0, 0x1]
+                        wr_illegal:
+                          - unchanged
+                description: ebreak instructions in U-mode enter Debug Mode.
+                shadow:
+                shadow_type: rw
+                msb: 12
+                lsb: 12
+            ebreaks:
+                implemented: true
+                type:
+                    warl:
+                        dependency_fields: []
+                        legal:
+                          - ebreaks[0] in [0x0, 0x1]
+                        wr_illegal:
+                          - unchanged
+                description: ebreak instructions in S-mode enter Debug Mode.
+                shadow:
+                shadow_type: rw
+                msb: 13
+                lsb: 13
+            ebreakm:
+                implemented: true
+                description: ebreak instructions in M-mode enter Debug Mode.
+                shadow:
+                shadow_type: rw
+                msb: 15
+                lsb: 15
+                type:
+                    warl:
+                        dependency_fields: []
+                        legal:
+                          - ebreakm[0] in [0x0, 0x1]
+                        wr_illegal:
+                          - unchanged
+            ebreakvu:
+                implemented: true
+                description: ebreak instructions in VU-mode enter Debug Mode.
+                shadow:
+                shadow_type: rw
+                msb: 16
+                lsb: 16
+                type: {ro_constant: 0}
+            ebreakvs:
+                implemented: true
+                description: ebreak instructions in VS-mode enter Debug Mode.
+                shadow:
+                shadow_type: rw
+                msb: 17
+                lsb: 17
+                type: {ro_constant: 0}
+            debugver:
+                implemented: true
+                type:
+                    ro_constant: 0x4
+                description: Debug support exists as it is described in this document.
+                shadow:
+                shadow_type: rw
+                msb: 31
+                lsb: 28
+            fields:
+              - prv
+              - step
+              - nmip
+              - mprven
+              - v
+              - cause
+              - stoptime
+              - stopcount
+              - stepie
+              - ebreaku
+              - ebreaks
+              - ebreakm
+              - ebreakvu
+              - ebreakvs
+              - debugver
+              -
+                  -
+                      - 14
+                  -
+                      - 18
+                      - 27
+                  -
+                      - 32
+                      - 63
+        description: The mstatus register keeps track of and controls the hart’s current
+            operating state.
+        address: 0x7b0
+        priv_mode: M
+    dpc:
+        reset-val: 0x0
+        rv64:
+            accessible: true
+            fields: []
+            shadow:
+            shadow_type: rw
+            msb: 63
+            lsb: 0
+            type:
+                warl:
+                    dependency_fields: []
+                    legal:
+                      - dpc[63:0] in [0x00000000:0xFFFFFFFFFFFFFFFF]
+                    wr_illegal:
+                      - unchanged
+        rv32:
+            accessible: false
+        description: Upon entry to debug mode, dpc is updated with the virtual address
+            of the next instruction to be executed.
+        address: 0x7b1
+        priv_mode: M
+    dscratch0:
+        reset-val: 0x0
+        rv64:
+            accessible: true
+            fields: []
+            shadow:
+            shadow_type: rw
+            msb: 63
+            lsb: 0
+            type:
+                warl:
+                    dependency_fields: []
+                    legal:
+                      - dscratch0[63:0] in [0x00000000:0xFFFFFFFFFFFFFFFF]
+                    wr_illegal:
+                      - unchanged
+
+        rv32:
+            accessible: false
+        description: The dscratch0 register is an DXLEN-bit read/write register dedicated
+            for use by debug mode.
+        address: 0x7b2
+        priv_mode: M
+    dscratch1:
+        reset-val: 0x0
+        rv64:
+            accessible: true
+            fields: []
+            shadow:
+            shadow_type: rw
+            msb: 63
+            lsb: 0
+            type:
+                warl:
+                    dependency_fields: []
+                    legal:
+                      - dscratch1[63:0] in [0x00000000:0xFFFFFFFFFFFFFFFF]
+                    wr_illegal:
+                      - unchanged
+
+        rv32:
+            accessible: false
+        description: The dscratch1 register is an DXLEN-bit read/write register dedicated
+            for use by debug mode.
+        address: 0x7b3
+        priv_mode: M
+    tselect:
+        rv32:
+            accessible: false
+        rv64:
+            accessible: false
+        description: describes the different triggers implemented.
+        address: 0x7a0
+        priv_mode: M
+        reset-val: 0
+    tdata2:
+        rv32:
+            accessible: false
+        rv64:
+            accessible: false
+        description: provides various control bits related to triggers.
+        address: 0x7a2
+        priv_mode: M
+        indexing_reg: true
+    tdata3:
+        rv32:
+            accessible: false
+        rv64:
+            accessible: false
+        description: provides various control bits related to triggers.
+        address: 0x7a3
+        priv_mode: M
+        indexing_reg: true
+    scontext:
+        rv32:
+            accessible: false
+        rv64:
+            accessible: false
+        description: provides various control bits related to triggers.
+        address: 0x5a8
+        priv_mode: M
+        indexing_reg: true
+    hcontext:
+        rv32:
+            accessible: false
+        rv64:
+            accessible: false
+        description: provides various control bits related to triggers.
+        address: 0x6a8
+        priv_mode: M
+        indexing_reg: true
+    tcontrol:
+        rv32:
+            accessible: false
+        rv64:
+            accessible: false
+        description: provides various control bits related to triggers.
+        address: 0x7a5
+        priv_mode: M
+        indexing_reg: true
+    tinfo:
+        rv32:
+            accessible: false
+        rv64:
+            accessible: false
+        description: describes the different triggers implemented.
+        address: 0x7a4
+        priv_mode: M
+        indexing_reg: true
+    tdata1:
+        rv32:
+            accessible: false
+        rv64:
+            accessible: false
+        description: describes the different triggers implemented.
+        address: 0x7a1
+        priv_mode: M
+        indexing_reg: true
+    ISA: RV64IMAFDCSUZicsr_Zifencei

@@ -12,7 +12,6 @@ MOREDEFINES=$(addprefix -D , $(BSC_DEFINES))
 .PHONY: generate_verilog
 generate_verilog: $(BSVBUILDDIR)/$(TOP_BIN)
 
-
 .PHONY: link_verilator
 link_verilator: ## Generate simulation executable using Verilator
 	@echo "Linking $(TOP_MODULE) using verilator"
